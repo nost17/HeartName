@@ -54,6 +54,22 @@ func imprimirNombre(nombre string, linea string) {
 	nuevaLinea := fmt.Sprintf("%s %s %s", linea[:anchoLinea-anchoNombreIzq], nombre, linea[:anchoLinea-anchoNombreDer])
 	fmt.Println(nuevaLinea)
 }
+func imprimirPicos(linea string, tamañoPico, tamañoMaximo int) {
+	for i := tamañoPico; i <= tamañoMaximo; i += 2 {
+		relleno := linea[:(i + 1)]
+		espacio := strings.Repeat(" ", (tamañoMaximo-i)/2)
+		fmt.Print(espacio, relleno, espacio, espacio, relleno, "\n")
+		// fmt.Print(len(relleno), len(espacio), i, maximo, tamañoExtra, "\n")
+	}
+}
+
+func imprimirCuerpo(linea string, tamañoPico, tamañoMaximo int) {
+	for i := (tamañoMaximo * 2) - 2; i > tamañoPico+(tamañoPico/2); i -= 2 {
+		relleno := linea[:i]
+		espacio := strings.Repeat(" ", ((tamañoMaximo*2)-i)/2)
+		fmt.Print(espacio, relleno, "\n")
+	}
+}
 
 func main() {
 	const Caracter string = "#"
@@ -68,17 +84,10 @@ func main() {
 	*/
 	maximo := (tamaño * 2) + tamañoPico - 1
 	linea := strings.Repeat(Caracter, maximo*2)
-	for i := tamañoPico; i <= maximo; i += 2 {
-		relleno := linea[:(i + 1)]
-		espacio := strings.Repeat(" ", (maximo-i)/2)
-		fmt.Print(espacio, relleno, espacio, espacio, relleno, "\n")
-		// fmt.Print(len(relleno), len(espacio), i, maximo, tamañoExtra, "\n")
-	}
+
+	imprimirPicos(linea, tamañoPico, maximo)
 	imprimirNombre(nombre, linea)
-	for i := (maximo * 2) - 2; i > tamañoPico+(tamañoPico/2); i -= 2 {
-		relleno := linea[:i]
-		espacio := strings.Repeat(" ", ((maximo*2)-i)/2)
-		fmt.Print(espacio, relleno, "\n")
-	}
+	imprimirCuerpo(linea, tamañoPico, maximo)
+
 	time.Sleep((1 * time.Second) / 3)
 }
