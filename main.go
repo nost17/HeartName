@@ -20,7 +20,7 @@ var AnchoDeTerminal int = obtenerAnchoTerminal()
 var EspacioParaCentrar string
 
 const Caracter string = "#"
-const CentrarDibujo = false
+const CentrarDibujo = true
 const EspacioParaDibujo = 4
 
 // const AcentoSeleccionado color.Attribute = color.FgGreen
@@ -86,8 +86,10 @@ func dibujarNombre(nombre string, linea string, salida *strings.Builder) {
 	anchoLinea := len(linea)
 	anchoNombre := n
 
+	salida.WriteString(EspacioParaCentrar)
 	if anchoNombre >= anchoLinea-1 || anchoNombre == 0 {
-		fmt.Println(linea)
+		salida.WriteString(linea)
+		salida.WriteString("\n")
 		return
 	}
 
@@ -97,7 +99,6 @@ func dibujarNombre(nombre string, linea string, salida *strings.Builder) {
 	anchoNombreIzq := len(nombre[:anchoNombre]) + 1
 	anchoNombreDer := len(nombre[anchoNombre:]) + 1
 	nombre = fmt.Sprintf(" %s ", nombre)
-	salida.WriteString(EspacioParaCentrar)
 	salida.WriteString(linea[:anchoLinea-anchoNombreIzq])
 	salida.WriteString(estiloNombre.Render(nombre))
 	salida.WriteString(estilo.Render(linea[:anchoLinea-anchoNombreDer]))
@@ -145,13 +146,26 @@ func imprimirTexto(texto string) {
 			esperar()
 		}
 		lipgloss.Print(letra)
+		os.Stdout.Sync()
 	}
 	// lipgloss.Println(texto)
 }
 
+func ocultarCursor() {
+	fmt.Print("\x1b[?25l")
+}
+func mostrarCursor() {
+	fmt.Print("\033[?25h")
+}
+func limpiarTerminal() {
+	fmt.Print("\033[H\033[2J")
+}
+
 func main() {
+	limpiarTerminal()
 	tamaño := leerNumero("Ingresa proporcion", "Error, vuelve a intentarlo")
 	nombre := leerTexto("Ingresa un nombre")
+	ocultarCursor()
 	nombre = strings.ToUpper(nombre)
 	tamaño = tamaño + 1
 	tamañoPico := (tamaño / 2) + 2
@@ -169,5 +183,5 @@ func main() {
 	dibujarNombre(nombre, linea, &salida)
 	dibujarCuerpo(linea, tamañoPico, &salida)
 	imprimirTexto(estilo.Render(salida.String()))
-
+	mostrarCursor()
 }
