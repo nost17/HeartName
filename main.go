@@ -139,14 +139,16 @@ func imprimirTexto(texto string) {
 	var saltarEspera bool = false
 	for i := range texto {
 		letra := string(texto[i])
-		if letra == "[" {
+		lipgloss.Print(letra)
+		if letra == " " {
+			continue
+		} else if letra == "[" {
 			saltarEspera = true
 		} else if letra == "m" && saltarEspera {
 			saltarEspera = false
 		} else if !saltarEspera && letra != " " {
 			esperar()
 		}
-		lipgloss.Print(letra)
 		os.Stdout.Sync()
 	}
 	// lipgloss.Println(texto)
