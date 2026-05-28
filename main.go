@@ -41,20 +41,20 @@ func main() {
 	const Caracter string = "#"
 	tamaño := leerNumero("Ingresa proporcion", "Error, vuelve a intentarlo")
 	tamaño = tamaño + 1
-	tamañoExtra := (tamaño / 2) + 2
+	tamañoPico := (tamaño / 2) + 2
 	/*
 		El ancho máximo de un triangulo será igual a
 		`(altura * 2) + 1` y tenemos que sumar el ancho
 		extra de las puntas (este ancho es para cada una)
 	*/
-	maximo := (tamaño * 2) + tamañoExtra - 1
-	for i := tamañoExtra; i <= maximo; i += 2 {
+	maximo := (tamaño * 2) + tamañoPico - 1
+	for i := tamañoPico; i <= maximo; i += 2 {
 		relleno := strings.Repeat(Caracter, i+1)
 		espacio := strings.Repeat(" ", (maximo-i)/2)
 		fmt.Print(espacio, relleno, espacio, espacio, relleno, "\n")
 		// fmt.Print(len(relleno), len(espacio), i, maximo, tamañoExtra, "\n")
 	}
-	for i := maximo * 2; i > maximo-tamañoExtra; i -= 2 {
+	for i := maximo * 2; i > maximo-tamañoPico; i -= 2 {
 		relleno := strings.Repeat(Caracter, i)
 		espacio := strings.Repeat(" ", ((maximo*2)-i)/2)
 		fmt.Print(espacio, relleno, "\n")
