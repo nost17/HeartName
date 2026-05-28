@@ -1,15 +1,11 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
 	"os"
-	"strconv"
 	"strings"
-	"time"
 
 	"charm.land/lipgloss/v2"
-	"golang.org/x/term"
 )
 
 const AcentoSeleccionado = lipgloss.Red
@@ -17,27 +13,10 @@ const Caracter string = "#"
 const CentrarDibujo = true
 const EspacioParaDibujo = 4
 
-var reader *bufio.Scanner = bufio.NewScanner(os.Stdin)
-
 var estilo = lipgloss.NewStyle().Foreground(AcentoSeleccionado)
 var estiloNombre = lipgloss.NewStyle().Foreground(lipgloss.White).Bold(true)
 var AnchoDeTerminal int = obtenerAnchoTerminal()
 var EspacioParaCentrar string
-
-// const AcentoSeleccionado color.Attribute = color.FgGreen
-
-func esperar() {
-	time.Sleep(8 * time.Millisecond)
-}
-
-func obtenerAnchoTerminal() int {
-	anchoTerminal, _, err := term.GetSize(int(os.Stdout.Fd()))
-	if err != nil {
-		fmt.Println("Error al obtener el tamaño de la terminal:", err)
-		panic(1)
-	}
-	return anchoTerminal
-}
 
 func generarEspacio(tamañoForma int) string {
 	var tamañoEspacio int
@@ -49,37 +28,6 @@ func generarEspacio(tamañoForma int) string {
 	}
 
 	return strings.Repeat(" ", tamañoEspacio)
-}
-
-func leerTexto(msg string) string {
-	for {
-		fmt.Print(msg + ": ")
-		if reader.Scan() {
-			return reader.Text()
-		}
-		if err := reader.Err(); err != nil {
-			fmt.Println(err)
-		}
-	}
-
-}
-
-func leerNumero(msg string, error_msg string) int {
-	for {
-		fmt.Printf("%s: ", msg)
-		var string_input string
-		if reader.Scan() {
-			string_input = reader.Text()
-		}
-		if err := reader.Err(); err != nil {
-			fmt.Println(err)
-		}
-		if output, err := strconv.Atoi(string_input); err != nil {
-			fmt.Println(error_msg)
-		} else {
-			return output
-		}
-	}
 }
 
 func dibujarNombre(nombre string, linea string, salida *strings.Builder) {
@@ -117,8 +65,6 @@ func dibujarPicos(linea string, tamañoPico int, salida *strings.Builder) {
 		salida.WriteString(espacio)
 		salida.WriteString(relleno)
 		salida.WriteString("\n")
-		// fmt.Print(espacio, relleno, espacio, espacio, relleno, "\n")
-		// fmt.Print(len(relleno), len(espacio), i, maximo, tamañoExtra, "\n")
 	}
 }
 
@@ -131,7 +77,6 @@ func dibujarCuerpo(linea string, tamañoPico int, salida *strings.Builder) {
 		salida.WriteString(espacio)
 		salida.WriteString(relleno)
 		salida.WriteString("\n")
-		// fmt.Print(len(relleno), "-")
 	}
 }
 
@@ -151,34 +96,6 @@ func imprimirTexto(texto string) {
 		}
 		os.Stdout.Sync()
 	}
-	// lipgloss.Println(texto)
-}
-
-func esperarTecla(msg string) {
-	fmt.Println()
-	fmt.Print(msg + " ")
-	fd := int(os.Stdin.Fd())
-
-	estadoOriginal, err := term.MakeRaw(fd)
-	if err != nil {
-		return
-	}
-
-	defer term.Restore(fd, estadoOriginal)
-
-	tecla := make([]byte, 1)
-	os.Stdin.Read(tecla)
-}
-
-func ocultarCursor() {
-	fmt.Print("\x1b[?25l")
-}
-func mostrarCursor() {
-	fmt.Print("\033[?25h")
-}
-func limpiarTerminal() {
-	fmt.Print("\033[H\033[2J")
-	fmt.Print("\033[H\033[3J")
 }
 
 func main() {
