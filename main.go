@@ -41,7 +41,7 @@ func imprimirNombre(nombre string, linea string) {
 	anchoLinea := len(linea)
 	anchoNombre := len(nombre)
 
-	if anchoNombre >= anchoLinea-1 {
+	if anchoNombre >= anchoLinea-1 || anchoNombre == 0 {
 		fmt.Println(linea)
 		return
 	}
