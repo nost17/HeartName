@@ -12,21 +12,22 @@ import (
 	"golang.org/x/term"
 )
 
-var reader *bufio.Scanner = bufio.NewScanner(os.Stdin)
-
-var estilo = lipgloss.NewStyle().Foreground(lipgloss.Green)
-var estiloNombre = lipgloss.NewStyle().Foreground(lipgloss.White).Bold(true)
-var AnchoDeTerminal int = obtenerAnchoTerminal()
-var EspacioParaCentrar string
-
+const AcentoSeleccionado = lipgloss.Red
 const Caracter string = "#"
 const CentrarDibujo = true
 const EspacioParaDibujo = 4
 
+var reader *bufio.Scanner = bufio.NewScanner(os.Stdin)
+
+var estilo = lipgloss.NewStyle().Foreground(AcentoSeleccionado)
+var estiloNombre = lipgloss.NewStyle().Foreground(lipgloss.White).Bold(true)
+var AnchoDeTerminal int = obtenerAnchoTerminal()
+var EspacioParaCentrar string
+
 // const AcentoSeleccionado color.Attribute = color.FgGreen
 
 func esperar() {
-	time.Sleep((1 * time.Second) / 25)
+	time.Sleep(8 * time.Millisecond)
 }
 
 func obtenerAnchoTerminal() int {
@@ -106,7 +107,7 @@ func dibujarNombre(nombre string, linea string, salida *strings.Builder) {
 }
 func dibujarPicos(linea string, tamañoPico int, salida *strings.Builder) {
 	tamañoMaximo := len(linea) / 2
-	for i := tamañoPico; i <= tamañoMaximo; i += 2 {
+	for i := tamañoPico; i <= tamañoMaximo; i += 4 {
 		relleno := linea[:(i + 1)]
 		espacio := strings.Repeat(" ", (tamañoMaximo-i)/2)
 		salida.WriteString(EspacioParaCentrar)
@@ -123,7 +124,7 @@ func dibujarPicos(linea string, tamañoPico int, salida *strings.Builder) {
 
 func dibujarCuerpo(linea string, tamañoPico int, salida *strings.Builder) {
 	tamañoMaximo := len(linea) / 2
-	for i := (tamañoMaximo * 2) - 2; i > tamañoPico+(tamañoPico/2); i -= 2 {
+	for i := (tamañoMaximo * 2) - 2; i > tamañoPico; i -= 4 {
 		relleno := linea[:i]
 		espacio := strings.Repeat(" ", ((tamañoMaximo*2)-i)/2)
 		salida.WriteString(EspacioParaCentrar)
@@ -159,6 +160,7 @@ func mostrarCursor() {
 }
 func limpiarTerminal() {
 	fmt.Print("\033[H\033[2J")
+	fmt.Print("\033[H\033[3J")
 }
 
 func main() {
@@ -168,7 +170,7 @@ func main() {
 	ocultarCursor()
 	nombre = strings.ToUpper(nombre)
 	tamaño = tamaño + 1
-	tamañoPico := (tamaño / 2) + 2
+	tamañoPico := tamaño
 	/*
 		El ancho máximo de un triangulo será igual a
 		`(altura * 2) + 1` y tenemos que sumar el ancho
