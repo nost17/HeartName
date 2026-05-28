@@ -3,15 +3,17 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"github.com/fatih/color"
 	"os"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/fatih/color"
 )
 
-var reader *bufio.Reader = bufio.NewReader(os.Stdin)
+var reader *bufio.Scanner = bufio.NewScanner(os.Stdin)
 
+const Caracter string = "#"
 const AcentoSeleccionado color.Attribute = color.FgGreen
 
 func esperar() {
@@ -20,27 +22,32 @@ func esperar() {
 
 func leerTexto(msg string) string {
 	for {
-		fmt.Printf("%s: ", msg)
-		text, err := reader.ReadString('\n')
-		var new_string string = strings.TrimSpace(string(text))
-		if err != nil {
-			continue
+		fmt.Print(msg + ": ")
+		if reader.Scan() {
+			return reader.Text()
 		}
-		return new_string
+		if err := reader.Err(); err != nil {
+			fmt.Println(err)
+		}
 	}
+
 }
 
 func leerNumero(msg string, error_msg string) int {
 	for {
 		fmt.Printf("%s: ", msg)
-		var raw_input string
-		_, err := fmt.Scan(&raw_input)
-		input, err2 := strconv.Atoi(raw_input)
-		if err != nil || err2 != nil {
-			fmt.Println(error_msg)
-			continue
+		var string_input string
+		if reader.Scan() {
+			string_input = reader.Text()
 		}
-		return input
+		if err := reader.Err(); err != nil {
+			fmt.Println(err)
+		}
+		if output, err := strconv.Atoi(string_input); err != nil {
+			fmt.Println(error_msg)
+		} else {
+			return output
+		}
 	}
 }
 
@@ -89,7 +96,6 @@ func imprimirCuerpo(linea string, tamañoPico, tamañoMaximo int) {
 }
 
 func main() {
-	const Caracter string = "#"
 	tamaño := leerNumero("Ingresa proporcion", "Error, vuelve a intentarlo")
 	nombre := leerTexto("Ingresa un nombre")
 	nombre = strings.ToUpper(nombre)
