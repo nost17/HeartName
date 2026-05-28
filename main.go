@@ -40,6 +40,7 @@ func leerNumero(msg string, error_msg string) int {
 func main() {
 	const Caracter string = "#"
 	tamaño := leerNumero("Ingresa proporcion", "Error, vuelve a intentarlo")
+	// nombre := leerTexto("Ingresa un nombre")
 	tamaño = tamaño + 1
 	tamañoPico := (tamaño / 2) + 2
 	/*
@@ -48,14 +49,15 @@ func main() {
 		extra de las puntas (este ancho es para cada una)
 	*/
 	maximo := (tamaño * 2) + tamañoPico - 1
+	linea := strings.Repeat(Caracter, maximo*2)
 	for i := tamañoPico; i <= maximo; i += 2 {
-		relleno := strings.Repeat(Caracter, i+1)
+		relleno := linea[:(i + 1)]
 		espacio := strings.Repeat(" ", (maximo-i)/2)
 		fmt.Print(espacio, relleno, espacio, espacio, relleno, "\n")
 		// fmt.Print(len(relleno), len(espacio), i, maximo, tamañoExtra, "\n")
 	}
 	for i := maximo * 2; i > maximo-tamañoPico; i -= 2 {
-		relleno := strings.Repeat(Caracter, i)
+		relleno := linea[:i]
 		espacio := strings.Repeat(" ", ((maximo*2)-i)/2)
 		fmt.Print(espacio, relleno, "\n")
 	}
