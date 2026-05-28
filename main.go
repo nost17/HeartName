@@ -16,7 +16,7 @@ func leerTexto(msg string) string {
 		fmt.Printf("%s: ", msg)
 		text, err := reader.ReadString('\n')
 		var new_string string = strings.TrimSpace(string(text))
-		if err != nil || len(new_string) == 0 {
+		if err != nil {
 			continue
 		}
 		return new_string
@@ -37,10 +37,28 @@ func leerNumero(msg string, error_msg string) int {
 	}
 }
 
+func imprimirNombre(nombre string, linea string) {
+	anchoLinea := len(linea)
+	anchoNombre := len(nombre)
+
+	if anchoNombre >= anchoLinea-1 {
+		fmt.Println(linea)
+		return
+	}
+
+	anchoLinea = anchoLinea / 2
+	anchoNombre = anchoNombre / 2
+
+	anchoNombreIzq := len(nombre[:anchoNombre]) + 1
+	anchoNombreDer := len(nombre[anchoNombre:]) + 1
+	nuevaLinea := fmt.Sprintf("%s %s %s", linea[:anchoLinea-anchoNombreIzq], nombre, linea[:anchoLinea-anchoNombreDer])
+	fmt.Println(nuevaLinea)
+}
+
 func main() {
 	const Caracter string = "#"
 	tamaño := leerNumero("Ingresa proporcion", "Error, vuelve a intentarlo")
-	// nombre := leerTexto("Ingresa un nombre")
+	nombre := leerTexto("Ingresa un nombre")
 	tamaño = tamaño + 1
 	tamañoPico := (tamaño / 2) + 2
 	/*
@@ -56,7 +74,8 @@ func main() {
 		fmt.Print(espacio, relleno, espacio, espacio, relleno, "\n")
 		// fmt.Print(len(relleno), len(espacio), i, maximo, tamañoExtra, "\n")
 	}
-	for i := maximo * 2; i > maximo-tamañoPico; i -= 2 {
+	imprimirNombre(nombre, linea)
+	for i := (maximo * 2) - 2; i > tamañoPico+(tamañoPico/2); i -= 2 {
 		relleno := linea[:i]
 		espacio := strings.Repeat(" ", ((maximo*2)-i)/2)
 		fmt.Print(espacio, relleno, "\n")
