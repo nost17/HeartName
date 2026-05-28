@@ -1,4 +1,4 @@
-module polare/HtSize
+module polare/HtName
 
 go 1.26.3
 
