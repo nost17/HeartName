@@ -166,6 +166,7 @@ func limpiarTerminal() {
 }
 
 func main() {
+	lipgloss.EnableLegacyWindowsANSI(os.Stdout)
 	limpiarTerminal()
 	tamaño := leerNumero("Ingresa proporcion", "Error, vuelve a intentarlo")
 	nombre := leerTexto("Ingresa un nombre")
