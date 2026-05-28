@@ -154,6 +154,22 @@ func imprimirTexto(texto string) {
 	// lipgloss.Println(texto)
 }
 
+func esperarTecla(msg string) {
+	fmt.Println()
+	fmt.Print(msg + " ")
+	fd := int(os.Stdin.Fd())
+
+	estadoOriginal, err := term.MakeRaw(fd)
+	if err != nil {
+		return
+	}
+
+	defer term.Restore(fd, estadoOriginal)
+
+	tecla := make([]byte, 1)
+	os.Stdin.Read(tecla)
+}
+
 func ocultarCursor() {
 	fmt.Print("\x1b[?25l")
 }
@@ -189,4 +205,5 @@ func main() {
 	dibujarCuerpo(linea, tamañoPico, &salida)
 	imprimirTexto(estilo.Render(salida.String()))
 	mostrarCursor()
+	esperarTecla("Presione una tecla para continuar...")
 }
