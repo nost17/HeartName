@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"github.com/fatih/color"
 	"os"
 	"strconv"
 	"strings"
@@ -10,6 +11,12 @@ import (
 )
 
 var reader *bufio.Reader = bufio.NewReader(os.Stdin)
+
+const AcentoSeleccionado color.Attribute = color.FgGreen
+
+func esperar() {
+	time.Sleep((1 * time.Second) / 3)
+}
 
 func leerTexto(msg string) string {
 	for {
@@ -37,9 +44,10 @@ func leerNumero(msg string, error_msg string) int {
 	}
 }
 
-func imprimirNombre(nombre string, linea string) {
+func imprimirNombre(nombre string, linea string, salida *color.Color) {
+	n := len(nombre)
 	anchoLinea := len(linea)
-	anchoNombre := len(nombre)
+	anchoNombre := n
 
 	if anchoNombre >= anchoLinea-1 || anchoNombre == 0 {
 		fmt.Println(linea)
@@ -51,8 +59,17 @@ func imprimirNombre(nombre string, linea string) {
 
 	anchoNombreIzq := len(nombre[:anchoNombre]) + 1
 	anchoNombreDer := len(nombre[anchoNombre:]) + 1
-	nuevaLinea := fmt.Sprintf("%s %s %s", linea[:anchoLinea-anchoNombreIzq], nombre, linea[:anchoLinea-anchoNombreDer])
-	fmt.Println(nuevaLinea)
+	nombre = fmt.Sprintf(" %s ", nombre)
+	nombreColoreado := color.New(color.FgWhite, color.Bold).Sprint(nombre)
+	nombreIndice := strings.Index(nombreColoreado, nombre)
+	salida.Print(linea[:anchoLinea-anchoNombreIzq])
+	for i := range nombreColoreado {
+		fmt.Print(string(nombreColoreado[i]))
+		if i >= nombreIndice && i <= nombreIndice+n {
+			esperar()
+		}
+	}
+	salida.Println(linea[:anchoLinea-anchoNombreDer])
 }
 func imprimirPicos(linea string, tamañoPico, tamañoMaximo int) {
 	for i := tamañoPico; i <= tamañoMaximo; i += 2 {
@@ -75,6 +92,7 @@ func main() {
 	const Caracter string = "#"
 	tamaño := leerNumero("Ingresa proporcion", "Error, vuelve a intentarlo")
 	nombre := leerTexto("Ingresa un nombre")
+	nombre = strings.ToUpper(nombre)
 	tamaño = tamaño + 1
 	tamañoPico := (tamaño / 2) + 2
 	/*
@@ -85,9 +103,10 @@ func main() {
 	maximo := (tamaño * 2) + tamañoPico - 1
 	linea := strings.Repeat(Caracter, maximo*2)
 
+	salidaColor := color.New(AcentoSeleccionado)
+
 	imprimirPicos(linea, tamañoPico, maximo)
-	imprimirNombre(nombre, linea)
+	imprimirNombre(nombre, linea, salidaColor)
 	imprimirCuerpo(linea, tamañoPico, maximo)
 
-	time.Sleep((1 * time.Second) / 3)
 }
