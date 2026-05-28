@@ -42,36 +42,22 @@ func main() {
 	tamaño := leerNumero("Ingresa proporcion", "Error, vuelve a intentarlo")
 	tamaño = tamaño + 1
 	tamañoExtra := (tamaño / 2) + 2
-	n := tamaño - 1
 	/*
 		El ancho máximo de un triangulo será igual a
 		`(altura * 2) + 1` y tenemos que sumar el ancho
 		extra de las puntas (este ancho es para cada una)
 	*/
-	maximo := (n * 2) + tamañoExtra + 1
-	// var j int = 0
+	maximo := (tamaño * 2) + tamañoExtra - 1
 	for i := tamañoExtra; i <= maximo; i += 2 {
 		relleno := strings.Repeat(Caracter, i+1)
 		espacio := strings.Repeat(" ", (maximo-i)/2)
 		fmt.Print(espacio, relleno, espacio, espacio, relleno, "\n")
+		// fmt.Print(len(relleno), len(espacio), i, maximo, tamañoExtra, "\n")
+	}
+	for i := maximo * 2; i > maximo-tamañoExtra; i -= 2 {
+		relleno := strings.Repeat(Caracter, i)
+		espacio := strings.Repeat(" ", ((maximo*2)-i)/2)
+		fmt.Print(espacio, relleno, "\n")
 	}
 	time.Sleep((1 * time.Second) / 3)
-	// for i := range tamaño {
-	// 	/*
-	// 		Para obtener la cantidad de numeros en un intervalo [a,b]
-	// 		es `b - a + 1` a -> (n-i) y b -> (n+i)
-	// 	*/
-	// 	relleno := strings.Repeat(string(Caracter), (n+i)-(n-i)+tamañoExtra+1)
-	// 	espacio := strings.Repeat(" ", (maximo-len(relleno))/2)
-	// 	// fmt.Errorf(espacio, relleno)
-	// 	// fmt.Print(n, tamaño, tamañoExtra, maximo, i, tamañoExtra+1+2*(n-i))
-	// 	fmt.Print(espacio, relleno, espacio, espacio, relleno)
-	// 	fmt.Printf("\n")
-	// 	time.Sleep((1 * time.Second) / 3)
-	// }
-	// for i := maximo; i > 0; i-- {
-	// 	relleno := strings.Repeat(string(Caracter), (n+i)-(n-i)+tamañoExtra+1)
-	// 	fmt.Print(n, i, tamañoExtra, len(relleno), "\n")
-	// 	time.Sleep((1 * time.Second) / 10)
-	// }
 }
