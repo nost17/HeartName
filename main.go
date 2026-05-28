@@ -40,30 +40,25 @@ func leerNumero(msg string, error_msg string) int {
 func main() {
 	const Caracter rune = '#'
 	tamaño := leerNumero("Ingresa proporcion", "Error, vuelve a intentarlo")
-	tamaño = int(float32(tamaño) * 1.5)
+	tamaño = tamaño + 1
+	tamañoExtra := (tamaño / 2) + 2
 	n := tamaño - 1
-	maximo := (n * 2) + 3 + (tamaño / 2)
+	/*
+		El ancho máximo de un triangulo será igual a
+		`(altura * 2) + 1` y tenemos que sumar el ancho
+		extra de las puntas (este ancho es para cada una)
+	*/
+	maximo := (n * 2) + tamañoExtra + 1
 	// var j int = 0
 	for i := range tamaño {
-		relleno := strings.Repeat(string(Caracter), (n+i)-(n-i)+(tamaño/2)+3)
+		/*
+			Para obtener la cantidad de numeros en un intervalo [a,b]
+			es `b - a + 1` a -> (n-i) y b -> (n+i)
+		*/
+		relleno := strings.Repeat(string(Caracter), (n+i)-(n-i)+tamañoExtra+1)
 		espacio := strings.Repeat(" ", (maximo-len(relleno))/2)
 		fmt.Print(espacio, relleno, espacio, espacio, relleno)
-		// for j := range (tamaño * 2) - 1 {
-		// relleno := strings.Repeat(string(Caracter), (n+i)-(n-i)+(tamaño/2)+3)
-		// if j >= (n - i) {
-		// 	if j == n {
-		// 		for range (tamaño / 2) + 2 {
-		// 			fmt.Printf("%c", Caracter)
-		// 		}
-		// 	} else {
-		// 		fmt.Printf("%s", relleno)
-		// 		continue
-		// 	}
-		// } else {
-		// 	fmt.Printf("%c", ' ')
-		// }
 		fmt.Printf("\n")
 		time.Sleep((1 * time.Second) / 3)
-		// }
 	}
 }
