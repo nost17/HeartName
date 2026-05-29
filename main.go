@@ -6,9 +6,9 @@ import (
 	"strings"
 
 	"charm.land/lipgloss/v2"
+	"github.com/charmbracelet/x/ansi"
 )
 
-const AcentoSeleccionado = lipgloss.Red
 const Caracter string = "#"
 const CentrarDibujo = true
 const EspacioParaDibujo = 4
@@ -16,6 +16,7 @@ const EspacioParaDibujo = 4
 var estilo = lipgloss.NewStyle().Foreground(AcentoSeleccionado)
 var estiloNombre = lipgloss.NewStyle().Foreground(lipgloss.White).Bold(true)
 var AnchoDeTerminal int = obtenerAnchoTerminal()
+var AcentoSeleccionado ansi.Color = lipgloss.Red
 var EspacioParaCentrar string
 
 func generarEspacio(tamañoForma int) string {
@@ -70,7 +71,7 @@ func dibujarPicos(linea string, tamañoPico int, salida *strings.Builder) {
 
 func dibujarCuerpo(linea string, tamañoPico int, salida *strings.Builder) {
 	tamañoMaximo := len(linea) / 2
-	for i := (tamañoMaximo * 2) - 2; i > tamañoPico; i -= 4 {
+	for i := (tamañoMaximo * 2) - 2; i > (tamañoPico / 2); i -= 4 {
 		relleno := linea[:i]
 		espacio := strings.Repeat(" ", ((tamañoMaximo*2)-i)/2)
 		salida.WriteString(EspacioParaCentrar)
