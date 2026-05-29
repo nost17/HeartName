@@ -99,8 +99,11 @@ func imprimirTexto(texto string) {
 	}
 }
 
-func main() {
+func init() {
 	lipgloss.EnableLegacyWindowsANSI(os.Stdout)
+}
+
+func main() {
 	limpiarTerminal()
 	tamaño := leerNumero("Ingresa proporcion", "Error, vuelve a intentarlo")
 	nombre := leerTexto("Ingresa un nombre")
