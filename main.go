@@ -9,15 +9,30 @@ import (
 	"github.com/charmbracelet/x/ansi"
 )
 
+type ColorDisponible struct {
+	nombre string
+	valor  ansi.Color
+}
+
+var ColoresDisponibles = [...]ColorDisponible{
+	{nombre: "Verde", valor: lipgloss.Green},
+	{nombre: "Rojo", valor: lipgloss.Red},
+	{nombre: "Azul", valor: lipgloss.Blue},
+	{nombre: "Amarillo", valor: lipgloss.Yellow},
+	{nombre: "Cian", valor: lipgloss.Cyan},
+	{nombre: "Magenta", valor: lipgloss.Magenta},
+}
+
+var AcentoSeleccionado ColorDisponible = ColoresDisponibles[1]
+
 const Caracter string = "#"
 const CentrarDibujo = true
 const EspacioParaDibujo = 4
 
-var estilo = lipgloss.NewStyle().Foreground(AcentoSeleccionado)
-var estiloNombre = lipgloss.NewStyle().Foreground(lipgloss.White).Bold(true)
-var AnchoDeTerminal int = obtenerAnchoTerminal()
-var AcentoSeleccionado ansi.Color = lipgloss.Red
 var EspacioParaCentrar string
+var Estilo lipgloss.Style
+var EstiloNombre = lipgloss.NewStyle().Foreground(lipgloss.White).Bold(true)
+var AnchoDeTerminal int = obtenerAnchoTerminal()
 
 func generarEspacio(tamañoForma int) string {
 	var tamañoEspacio int
@@ -50,8 +65,8 @@ func dibujarNombre(nombre string, linea string, salida *strings.Builder) {
 	anchoNombreDer := len(nombre[anchoNombre:]) + 1
 	nombre = fmt.Sprintf(" %s ", nombre)
 	salida.WriteString(linea[:anchoLinea-anchoNombreIzq])
-	salida.WriteString(estiloNombre.Render(nombre))
-	salida.WriteString(estilo.Render(linea[:anchoLinea-anchoNombreDer]))
+	salida.WriteString(EstiloNombre.Render(nombre))
+	salida.WriteString(Estilo.Render(linea[:anchoLinea-anchoNombreDer]))
 	salida.WriteString("\n")
 }
 func dibujarPicos(linea string, tamañoPico int, salida *strings.Builder) {
@@ -107,6 +122,8 @@ func main() {
 	limpiarTerminal()
 	tamaño := leerNumero("Ingresa proporcion", "Error, vuelve a intentarlo")
 	nombre := leerTexto("Ingresa un nombre")
+	AcentoSeleccionado = elegirColor()
+	Estilo = lipgloss.NewStyle().Foreground(AcentoSeleccionado.valor)
 	ocultarCursor()
 	nombre = strings.ToUpper(nombre)
 	tamaño = tamaño + 1
@@ -124,7 +141,7 @@ func main() {
 	dibujarPicos(linea, tamañoPico, &salida)
 	dibujarNombre(nombre, linea, &salida)
 	dibujarCuerpo(linea, tamañoPico, &salida)
-	imprimirTexto(estilo.Render(salida.String()))
+	imprimirTexto(Estilo.Render(salida.String()))
 	mostrarCursor()
 	esperarTecla("Presione una tecla para continuar...")
 }

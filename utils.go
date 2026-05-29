@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"time"
 
+	"charm.land/lipgloss/v2"
 	"github.com/charmbracelet/x/term"
 )
 
@@ -54,4 +55,45 @@ func leerNumero(msg string, error_msg string) int {
 			return output
 		}
 	}
+}
+
+func leerNumeroTambienVacio(msg string, error_msg string, defecto int) int {
+	for {
+		var string_input string = leerTexto(msg)
+		if string_input == "" {
+			return defecto
+		} else if output, err := strconv.Atoi(string_input); err != nil {
+			fmt.Println(error_msg)
+		} else {
+			return output
+		}
+	}
+}
+
+func imprimirColores() int {
+	var colorPorDefecto int = 0
+	fmt.Println()
+	for i, c := range ColoresDisponibles {
+		nombre := c.nombre
+
+		if c.nombre == AcentoSeleccionado.nombre {
+			nombre += " [Por defecto]"
+			colorPorDefecto = i + 1
+		}
+
+		lipgloss.Printf("%d. %s %s    ", i+1, nombre, lipgloss.NewStyle().Background(c.valor).Render("   "))
+	}
+	fmt.Print("\n\n")
+	return colorPorDefecto
+}
+
+func elegirColor() ColorDisponible {
+	colorPorDefecto := imprimirColores()
+
+	n := len(ColoresDisponibles)
+	seleccion := leerNumeroTambienVacio("Elija un color [1 - "+strconv.Itoa(n)+"]", "Intenta otra vez", colorPorDefecto)
+	seleccion = min(max(seleccion, 1), n)
+	seleccion--
+
+	return ColoresDisponibles[seleccion]
 }
