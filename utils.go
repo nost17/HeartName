@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"charm.land/lipgloss/v2"
+	"charm.land/lipgloss/v2/table"
 	"github.com/charmbracelet/x/term"
 )
 
@@ -70,30 +71,55 @@ func leerNumeroTambienVacio(msg string, error_msg string, defecto int) int {
 	}
 }
 
-func imprimirColores() int {
-	var colorPorDefecto int = 0
-	fmt.Println()
+func listarColores() int {
+	var (
+		gris = lipgloss.Color("241")
+
+		cabeceraEstilo  = lipgloss.NewStyle().Foreground(lipgloss.White).Bold(true).Align(lipgloss.Center)
+		celdaEstilo     = lipgloss.NewStyle().Padding(0, 1).Foreground(lipgloss.White)
+		colorPorDefecto = 0
+	)
+
+	t := table.New().
+		Border(lipgloss.NormalBorder()).
+		BorderStyle(lipgloss.NewStyle().Foreground(gris)).
+		StyleFunc(func(row, col int) lipgloss.Style {
+			if row == table.HeaderRow {
+				return cabeceraEstilo
+			} else {
+				return celdaEstilo
+			}
+		}).
+		Headers("ID", "NOMBRE", "COLOR")
+
 	for i, c := range ColoresDisponibles {
 		nombre := c.nombre
 
 		if c.nombre == AcentoSeleccionado.nombre {
-			nombre += " [Por defecto]"
+			nombre = "* " + nombre
 			colorPorDefecto = i + 1
 		}
-
-		lipgloss.Printf("%d. %s %s    ", i+1, nombre, lipgloss.NewStyle().Background(c.valor).Render("   "))
+		t.Row(strconv.Itoa(i+1), nombre, lipgloss.NewStyle().Background(c.valor).Render("   "))
 	}
-	fmt.Print("\n\n")
+
+	lipgloss.Println(t)
+
 	return colorPorDefecto
 }
 
 func elegirColor() ColorDisponible {
-	colorPorDefecto := imprimirColores()
+	colorPorDefecto := listarColores()
 
 	n := len(ColoresDisponibles)
-	seleccion := leerNumeroTambienVacio("Elija un color [1 - "+strconv.Itoa(n)+"]", "Intenta otra vez", colorPorDefecto)
+	seleccion := leerNumeroTambienVacio("Elige un color [1 - "+strconv.Itoa(n)+"]", "Intenta otra vez", colorPorDefecto)
 	seleccion = min(max(seleccion, 1), n)
 	seleccion--
 
 	return ColoresDisponibles[seleccion]
+}
+
+func elegirProporcion() int {
+	seleccion := leerNumeroTambienVacio(fmt.Sprintf("%s [%d - %d]", "Elige una proporcion", ProporcionMinima, ProporcionMaxima), "Intenta otra vez", ProporcionPorDefecto)
+	seleccion = min(max(seleccion, ProporcionMinima), ProporcionMaxima)
+	return seleccion
 }

@@ -28,6 +28,9 @@ var AcentoSeleccionado ColorDisponible = ColoresDisponibles[1]
 const Caracter string = "#"
 const CentrarDibujo = true
 const EspacioParaDibujo = 4
+const ProporcionPorDefecto = 3
+const ProporcionMaxima = 10
+const ProporcionMinima = 1
 
 var EspacioParaCentrar string
 var Estilo lipgloss.Style
@@ -120,10 +123,11 @@ func init() {
 
 func main() {
 	limpiarTerminal()
-	tamaño := leerNumero("Ingresa proporcion", "Error, vuelve a intentarlo")
+	tamaño := elegirProporcion()
 	nombre := leerTexto("Ingresa un nombre")
 	AcentoSeleccionado = elegirColor()
 	Estilo = lipgloss.NewStyle().Foreground(AcentoSeleccionado.valor)
+
 	ocultarCursor()
 	nombre = strings.ToUpper(nombre)
 	tamaño = tamaño + 1
@@ -141,6 +145,7 @@ func main() {
 	dibujarPicos(linea, tamañoPico, &salida)
 	dibujarNombre(nombre, linea, &salida)
 	dibujarCuerpo(linea, tamañoPico, &salida)
+	limpiarTerminal()
 	imprimirTexto(Estilo.Render(salida.String()))
 	mostrarCursor()
 	esperarTecla("Presione una tecla para continuar...")
