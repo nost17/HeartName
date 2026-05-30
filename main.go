@@ -123,7 +123,12 @@ func init() {
 
 func main() {
 	limpiarTerminal()
-	nombre, tamaño := ingresarParametros(&AcentoSeleccionado)
+	nombre, tamaño, err := ingresarParametros(&AcentoSeleccionado)
+
+	if err != nil {
+		return
+	}
+
 	Estilo = lipgloss.NewStyle().Foreground(AcentoSeleccionado.valor)
 
 	ocultarCursor()
