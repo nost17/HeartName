@@ -49,6 +49,7 @@ func ingresarParametros(acento *ColorDisponible) (string, int) {
 			}),
 		huh.NewInput().
 			Title("Ingresa un nombre").
+			Value(&seleccionNombre).
 			CharLimit(40).
 			Placeholder("Puede estar en blanco").Validate(func(s string) error { return nil }),
 		huh.NewSelect[ColorDisponible]().Value(acento).
