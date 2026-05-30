@@ -123,9 +123,7 @@ func init() {
 
 func main() {
 	limpiarTerminal()
-	tamaño := elegirProporcion()
-	nombre := leerTexto("Ingresa un nombre")
-	AcentoSeleccionado = elegirColor()
+	nombre, tamaño := ingresarParametros(&AcentoSeleccionado)
 	Estilo = lipgloss.NewStyle().Foreground(AcentoSeleccionado.valor)
 
 	ocultarCursor()
@@ -145,7 +143,6 @@ func main() {
 	dibujarPicos(linea, tamañoPico, &salida)
 	dibujarNombre(nombre, linea, &salida)
 	dibujarCuerpo(linea, tamañoPico, &salida)
-	limpiarTerminal()
 	imprimirTexto(Estilo.Render(salida.String()))
 	mostrarCursor()
 	esperarTecla("Presione una tecla para continuar...")
